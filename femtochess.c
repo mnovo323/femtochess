@@ -6,6 +6,8 @@
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 #include "stdio.h"
 #include "stdint.h" // for uint_fast8_t
+#include "inttypes.h" // for PRIuFAST8 and PRIuFAST32
+#define PIECE_VALUE(color, piece) piece_values[piece | color << 3]
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-= BOARD REPRESENTATION -=-=-=-=-=-=-=-=-=-=-=-=-= */
 /* The basis of this board representation is a 10x12 mailbox.                 */
@@ -28,6 +30,10 @@
 /* 14 = white queen                                                           */
 /* 10 = white king                                                            */
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+enum { EMPTY, PAWN, KING, KNIGHT, BISHOP, ROOK, QUEEN, OFFBOARD };
+enum { BLACK, WHITE };
+
 uint_fast8_t board[120] = {
         7,  7,  7,  7,  7,  7,  7,  7,  7,  7,
         7,  7,  7,  7,  7,  7,  7,  7,  7,  7,
@@ -43,8 +49,22 @@ uint_fast8_t board[120] = {
         7,  7,  7,  7,  7,  7,  7,  7,  7,  7
 };
 
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-= PIECE VALUES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+/* Pawn = 100                                                                 */
+/* Knight = 300                                                               */
+/* Bishop = 300                                                               */
+/* Rook = 500                                                                 */
+/* Queen = 900                                                                */
+/* King = 2000                                                                */
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+uint_fast32_t piece_values[15] = {
+        0, 100, 2000, 300, 300, 500, 900, 0, 0, 100, 2000, 300, 300, 500, 900
+};
+
 int main()
 {
         printf("Hello, world!\n");
+        printf("The value of a black king is: %"PRIuFAST32"\n", PIECE_VALUE(BLACK, KING));
         return 0;
 }
